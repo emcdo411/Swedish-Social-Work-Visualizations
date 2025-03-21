@@ -92,10 +92,6 @@ Thanks to my girlfriend for her insights into Swedish social work, and to the R 
 4. **Verify**: Check your GitHub repo online to ensure all files (script, README, outputs) are uploaded.
 
 This gives you a polished, professional repo to share! Let me know if you need help with Git or want to refine anything further.<img width="959" alt="Screenshot 2025-03-20 182050" src="https://github.com/user-attachments/assets/6d611cc9-af3f-42a1-a263-a9f8b6073ad3" />
-<img width="949" alt="Screenshot 2025-03-20 183651" src="https://github.com/user-attachments/assets/25b6ecc6-9657-4741-8da5-dbf526b606f4" />
-<img width="959" alt="Screenshot 2025-03-20 183958" src="https://github.com/user-attachments/assets/865f36ee-a700-4bfe-ae7a-eaf4f02dbda7" />
-<img width="959" alt="Screenshot 2025-03-20 184235" src="https://github.com/user-attachments/assets/3def507c-0741-4a2e-bda7-356b217f2183" />
-<img width="953" alt="Screenshot 2025-03-20 185247" src="https://github.com/user-attachments/assets/94364643-add3-4b89-b3a5-df79611d217c" />
 
 ### Clean Script for All Advanced Graphs
 
@@ -215,6 +211,13 @@ Run this once in RStudio, then you can skip it in future runs.
 - Reflects the focus on visualizing Swedish social work data, concise and descriptive.
 
 ---
+<img width="953" alt="Screenshot 2025-03-20 185247" src="https://github.com/user-attachments/assets/844f7b19-1d2f-4fde-b5a6-8030a93704c4" />
+<img width="959" alt="Screenshot 2025-03-20 184235" src="https://github.com/user-attachments/assets/9af57e65-c7cf-40ba-929f-f81caa7fd5d8" />
+<img width="959" alt="Screenshot 2025-03-20 183958" src="https://github.com/user-attachments/assets/eb25931b-a144-4e15-b0be-46b4939c71c1" />
+<img width="949" alt="Screenshot 2025-03-20 183651" src="https://github.com/user-attachments/assets/9ca6aabf-9642-4990-87af-0b28f60a1110" />
+
+
+
 
 
 
