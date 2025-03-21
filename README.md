@@ -1,3 +1,131 @@
+Below, I’ll provide a clean, error-free script with all three advanced graphs (`p3`, `p4`, `p5`)—the Animated Bubble Chart, 3D Surface Plot, and Paired Correlation Matrix—streamlined from our previous work. Then, I’ll create a README for your GitHub repository and suggest a repo name.
+
+---
+
+### Clean Script for All Advanced Graphs
+
+This script includes all necessary steps, assumes packages are installed, and avoids the pitfalls we encountered (e.g., typos, missing renderers).
+
+```R
+# Load required libraries
+library(dplyr)      # For data manipulation
+library(tidyr)      # For pivot_longer
+library(ggplot2)    # For plotting
+library(gganimate)  # For animated bubble chart (p3)
+library(gifski)     # For GIF rendering
+library(plotly)     # For 3D surface plot (p4)
+library(GGally)     # For correlation matrix (p5)
+
+# Simulated data for Swedish nationals
+nationals_data <- data.frame(
+  Year = 2020:2025,
+  Trust_Level = c(75, 70, 65, 62, 60, 63),
+  Satisfaction_Score = c(7.8, 7.5, 7.2, 7.0, 6.8, 7.0),
+  Accessibility_Rating = c(7.0, 6.8, 6.5, 6.3, 6.2, 6.5),
+  Workload_Score = c(8.0, 8.2, 8.5, 8.3, 8.1, 7.8),
+  Intervention_Success = c(70, 68, 65, 64, 63, 68),
+  Disinformation_Impact = c(2.0, 4.5, 5.0, 4.8, 4.0, 3.5)
+)
+
+# Simulated data for immigrants
+immigrants_data <- data.frame(
+  Year = 2020:2025,
+  Trust_Level = c(60, 58, 55, 52, 50, 53),
+  Satisfaction_Score = c(6.5, 6.3, 6.0, 5.8, 5.7, 5.9),
+  Accessibility_Rating = c(5.5, 5.3, 5.0, 4.8, 4.7, 5.0),
+  Workload_Score = c(8.5, 8.7, 8.8, 8.6, 8.4, 8.0),
+  Intervention_Success = c(60, 58, 55, 54, 53, 58),
+  Disinformation_Impact = c(3.0, 5.5, 6.0, 5.8, 5.0, 4.0)
+)
+
+# Combine data and add a group identifier
+combined_data <- bind_rows(
+  nationals_data %>% mutate(Group = "Swedish Nationals"),
+  immigrants_data %>% mutate(Group = "Immigrants")
+)
+
+# Convert to long format (optional for some plots)
+data_long <- combined_data %>%
+  pivot_longer(cols = c(Trust_Level, Satisfaction_Score, Accessibility_Rating, 
+                        Workload_Score, Intervention_Success, Disinformation_Impact),
+               names_to = "Metric", values_to = "Value")
+
+# Graph 1: Animated Bubble Chart (p3)
+p3 <- ggplot(combined_data, aes(x = Year, y = Trust_Level, size = Satisfaction_Score, color = Group)) +
+  geom_point(alpha = 0.7) +
+  scale_size(range = c(3, 15)) +
+  scale_color_manual(values = c("Swedish Nationals" = "blue", "Immigrants" = "red")) +
+  labs(title = "Trust Level vs. Satisfaction (2020-2025)",
+       subtitle = "Bubble size = Satisfaction Score",
+       x = "Year", y = "Trust Level (%)", size = "Satisfaction Score", color = "Group") +
+  theme_minimal() +
+  transition_time(Year) +
+  shadow_wake(wake_length = 0.1)
+
+anim <- animate(p3, nframes = 100, fps = 10, width = 800, height = 600, renderer = gifski_renderer())
+print(anim)  # Display in Viewer pane
+anim_save("social_work_bubble_anim.gif", anim)
+cat("Bubble chart GIF saved to:", getwd(), "/social_work_bubble_anim.gif\n")
+
+# Graph 2: 3D Surface Plot (p4)
+surface_data <- combined_data %>%
+  select(Year, Group, Trust_Level) %>%
+  pivot_wider(names_from = Group, values_from = Trust_Level) %>%
+  as.matrix()
+
+p4 <- plot_ly(z = surface_data[, -1], x = 2020:2025, y = c("Swedish Nationals", "Immigrants"), 
+              type = "surface") %>%
+  layout(title = "Trust Level Surface Plot (2020-2025)",
+         scene = list(xaxis = list(title = "Year"),
+                      yaxis = list(title = "Group"),
+                      zaxis = list(title = "Trust Level (%)")))
+
+print(p4)  # Display in Viewer pane or browser
+htmlwidgets::saveWidget(p4, "social_work_3d_surface.html")
+cat("3D surface plot saved to:", getwd(), "/social_work_3d_surface.html\n")
+
+# Graph 3: Paired Correlation Matrix (p5)
+p5 <- ggpairs(combined_data, columns = 2:7,  # Trust_Level to Disinformation_Impact
+              aes(color = Group, alpha = 0.5),
+              upper = list(continuous = "cor"),
+              lower = list(continuous = "points"),
+              diag = list(continuous = "densityDiag")) +
+  labs(title = "Correlation Matrix of Social Work Metrics") +
+  theme_minimal()
+
+print(p5)  # Display in Plots pane
+ggsave("social_work_correlation_matrix.png", p5, width = 12, height = 12, dpi = 300)
+cat("Correlation matrix saved to:", getwd(), "/social_work_correlation_matrix.png\n")
+```
+
+### Prerequisites
+Before running, ensure these packages are installed:
+```R
+install.packages(c("dplyr", "tidyr", "ggplot2", "gganimate", "gifski", "plotly", "GGally", "htmlwidgets"))
+```
+Run this once in RStudio, then you can skip it in future runs.
+
+### Running Instructions
+1. **Save as Script**: Save this as `social_work_visualizations.R` in your project folder.
+2. **Open in RStudio**: Open the file and run all lines (Ctrl+A, Ctrl+Enter).
+3. **Outputs**:
+   - `social_work_bubble_anim.gif`: Animated GIF (Viewer pane and file).
+   - `social_work_3d_surface.html`: Interactive 3D plot (Viewer pane or browser and file).
+   - `social_work_correlation_matrix.png`: Static matrix (Plots pane and file).
+
+---
+
+### Suggested Repository Name
+**`Swedish-Social-Work-Visualizations`**  
+- Reflects the focus on visualizing Swedish social work data, concise and descriptive.
+
+---
+
+### README for GitHub
+
+Create a file named `README.md` in your repository with this content:
+
+```markdown
 # Swedish-Social-Work-Visualizations
 
 This repository contains advanced visualizations of simulated data exploring changes in Swedish social work practices, inspired by the 2025 Social Services Act. The project uses R to create three sophisticated graphs: an animated bubble chart, a 3D surface plot, and a paired correlation matrix, analyzing metrics like trust, satisfaction, and workload across Swedish nationals and immigrants from 2020 to 2025.
@@ -39,31 +167,31 @@ The data is simulated based on trends from the 2025 Social Services Act and rela
 - Install with: 
   ```R
   install.packages(c("dplyr", "tidyr", "ggplot2", "gganimate", "gifski", "plotly", "GGally", "htmlwidgets"))
+  ```
 
- How to Run
-Clone this repository:
-bash
+## How to Run
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/Swedish-Social-Work-Visualizations.git
+   ```
+2. Open `social_work_visualizations.R` in RStudio.
+3. Run the script to generate all visualizations.
+4. Outputs will appear in RStudio (Viewer and Plots panes) and save to your working directory.
 
-Collapse
+## Files
+- `social_work_visualizations.R`: Main R script
+- `social_work_bubble_anim.gif`: Animated output
+- `social_work_3d_surface.html`: Interactive 3D plot
+- `social_work_correlation_matrix.png`: Correlation matrix
 
-Wrap
+## Future Enhancements
+- Integrate real data from Swedish social work reports.
+- Add statistical models to quantify policy impacts.
+- Expand visualizations with heatmaps or network graphs.
 
-Copy
-git clone https://github.com/yourusername/Swedish-Social-Work-Visualizations.git
-Open social_work_visualizations.R in RStudio.
-Run the script to generate all visualizations.
-Outputs will appear in RStudio (Viewer and Plots panes) and save to your working directory.
-
-Files
-social_work_visualizations.R: Main R script
-social_work_bubble_anim.gif: Animated output
-social_work_3d_surface.html: Interactive 3D plot
-social_work_correlation_matrix.png: Correlation matrix
-Future Enhancements
-Integrate real data from Swedish social work reports.
-Add statistical models to quantify policy impacts.
-Expand visualizations with heatmaps or network graphs.
-
+## Acknowledgments
+Thanks to my girlfriend for her insights into Swedish social work, and to the R community for powerful visualization tools.
+```
 
 ---
 
@@ -81,7 +209,12 @@ Expand visualizations with heatmaps or network graphs.
      git add .
      git commit -m "Initial commit with R script and visualizations"
      git remote add origin https://github.com/yourusername/Swedish-Social-Work-Visualizations.git
-     git push -u origin main<img width="959" alt="Screenshot 2025-03-20 182050" src="https://github.com/user-attachments/assets/cadbbd70-183f-4fcb-9218-3a00b08dcd6e" />
+     git push -u origin main
+     ```
+   - Replace `yourusername` with your GitHub username.
+4. **Verify**: Check your GitHub repo online to ensure all files (script, README, outputs) are uploaded.
+
+This gives you a polished, professional repo to share! Let me know if you need help with Git or want to refine anything further.
 <img width="949" alt="Screenshot 2025-03-20 183651" src="https://github.com/user-attachments/assets/dbd4793a-a665-4490-88c2-f5272b797109" />
 <img width="959" alt="Screenshot 2025-03-20 183958" src="https://github.com/user-attachments/assets/197b25a5-9a3d-41aa-a1f7-ec362ac02689" />
 <img width="959" alt="Screenshot 2025-03-20 184235" src="https://github.com/user-attachments/assets/21dbe4bf-e9c9-43ad-adbf-475c2c23df6e" />
